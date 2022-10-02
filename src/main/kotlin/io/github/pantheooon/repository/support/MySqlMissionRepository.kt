@@ -19,10 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package press.pantheon.repository.support
+package io.github.pantheooon.repository.support
 
-import press.pantheon.model.MissionRecord
-import press.pantheon.repository.MissionRepository
+import io.github.pantheooon.model.MissionRecord
+import io.github.pantheooon.repository.MissionRepository
 import java.sql.Timestamp
 import java.util.*
 import javax.sql.DataSource

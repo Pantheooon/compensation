@@ -19,28 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package press.pantheon.repository.support
+package io.github.pantheooon.repository
 
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.KotlinModule
-import press.pantheon.mission.Mission
-import press.pantheon.repository.Serialize
-import java.text.SimpleDateFormat
+import io.github.pantheooon.mission.Mission
+import io.github.pantheooon.mission.MissionExecutedResult
+import io.github.pantheooon.model.MissionRecord
+import java.util.*
 
-class JackSonSerialize : Serialize {
+interface MissionRepository {
 
 
-    private val mapper =  ObjectMapper().registerModule(KotlinModule())
+    fun saveMission(mission: MissionRecord)
 
-    init {
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
-        mapper.configure(DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS, false);
-        mapper.dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-    }
 
-    override fun encode(mission: Mission): String = mapper.writeValueAsString(mission)
-    override fun decode(json: String, clazz: Class<Mission>):Mission?  =  mapper.readValue(json,clazz)
+    fun updateMission(record: MissionRecord)
 
+
+    fun cleanUp(expired: Date)
+
+
+    fun compensateRecords(): List<MissionRecord>
 }

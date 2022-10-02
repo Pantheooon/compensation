@@ -19,31 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package press.pantheon.model
+package io.github.pantheooon.engine
 
+import io.github.pantheooon.mission.Mission
+import io.github.pantheooon.mission.MissionExecutedResult
 import java.util.*
 
-data class MissionRecord(
-    val missionCode:String,
-    val className: String,
-    var properties:String,
-    var errorMsg:String?,
-    var status: Int,
-    var times: Int,
-    var nextExecuteDate: Date,
-    var created: Date,
-    var updated: Date
+interface MissionEngine {
 
-) {
-    var id: String? = UUID.randomUUID().toString()
+    fun executeMission(mission: Mission): MissionExecutedResult
+
+    fun compensate()
+
+    fun cleanUp(expired: Date)
 }
-
-class MissionRecordStatus {
-    companion object {
-        const val waitingToStart = 0
-        const val processing = 1
-        const val success = 2
-        const val failed = 3
-    }
-}
-

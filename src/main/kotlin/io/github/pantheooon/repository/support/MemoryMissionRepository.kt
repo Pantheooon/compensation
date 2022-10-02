@@ -19,23 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package press.pantheon.mission
+package io.github.pantheooon.repository.support
 
-import java.util.concurrent.TimeUnit
+import io.github.pantheooon.model.MissionRecord
+import io.github.pantheooon.model.MissionRecordStatus.Companion.waitingToStart
+import io.github.pantheooon.repository.MissionRepository
+import java.util.*
 
-annotation class MissionMeta(
 
-        val missionCode: String,
+class MemoryMissionRepository : MissionRepository {
 
-        val retryTimes: Int = 7,
+    private val missionList = mutableListOf<MissionRecord>()
 
-        val gapTime: Long = 1,
 
-        val gapTimeUnit: TimeUnit = TimeUnit.MINUTES,
+    override fun saveMission(mission: MissionRecord):Unit  = missionList.run {
+        add(mission)
+    }
 
-        val retryType: RetryType = RetryType.EXPONENT
-)
 
-enum class RetryType {
-        INTERVAL, EXPONENT
+    override fun updateMission(mission: MissionRecord): Unit = missionList.run {
+        removeIf { it.id == mission.id }
+        add(mission)
+    }
+
+    override fun cleanUp(expired: Date): Unit = missionList.run {
+        removeIf { it.created < expired }
+    }
+
+    override fun compensateRecords(): List<MissionRecord> = missionList.filter { it.status == waitingToStart && it.nextExecuteDate <= Date()}
 }

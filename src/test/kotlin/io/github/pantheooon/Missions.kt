@@ -1,7 +1,7 @@
-package press.pantheon
+package io.github.pantheooon
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import press.pantheon.mission.*
+import io.github.pantheooon.mission.*
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
@@ -77,7 +77,7 @@ class RollBackMissionImpl : RollbackAbleMission {
     gapTimeUnit = TimeUnit.SECONDS,
     gapTime = 1
 )
-class SuccessMission : Mission{
+class SuccessMission : Mission {
     override fun execute(): MissionExecutedResult {
         return MissionExecutedResult(success = true)
     }

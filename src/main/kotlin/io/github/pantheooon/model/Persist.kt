@@ -19,15 +19,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package press.pantheon.repository
+package io.github.pantheooon.model
 
-import press.pantheon.mission.Mission
+import java.util.*
 
-interface Serialize {
+data class MissionRecord(
+    val missionCode:String,
+    val className: String,
+    var properties:String,
+    var errorMsg:String?,
+    var status: Int,
+    var times: Int,
+    var nextExecuteDate: Date,
+    var created: Date,
+    var updated: Date
 
-
-    fun encode(mission: Mission): String
-
-
-    fun decode(json: String, clazz: Class<Mission>):Mission?
+) {
+    var id: String? = UUID.randomUUID().toString()
 }
+
+class MissionRecordStatus {
+    companion object {
+        const val waitingToStart = 0
+        const val processing = 1
+        const val success = 2
+        const val failed = 3
+    }
+}
+

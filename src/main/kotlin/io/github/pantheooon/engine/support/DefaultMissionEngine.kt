@@ -19,15 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package press.pantheon.engine.support
+package io.github.pantheooon.engine.support
 
 import org.slf4j.LoggerFactory
-import press.pantheon.engine.MissionEngine
-import press.pantheon.mission.*
-import press.pantheon.model.MissionRecord
-import press.pantheon.model.MissionRecordStatus
-import press.pantheon.repository.MissionRepository
-import press.pantheon.repository.Serialize
+import io.github.pantheooon.engine.MissionEngine
+import io.github.pantheooon.mission.*
+import io.github.pantheooon.model.MissionRecord
+import io.github.pantheooon.model.MissionRecordStatus
+import io.github.pantheooon.repository.MissionRepository
+import io.github.pantheooon.repository.Serialize
 import java.lang.Exception
 import java.util.*
 
@@ -75,7 +75,7 @@ class DefaultMissionEngine(private val repository: MissionRepository, private va
         }
         for (it in records) {
             with(it) {
-                status = MissionRecordStatus.processing
+                status = io.github.pantheooon.model.MissionRecordStatus.processing
                 updated = Date()
                 repository.updateMission(it)
             }
@@ -86,7 +86,7 @@ class DefaultMissionEngine(private val repository: MissionRepository, private va
 
             if (mission == null) {
                 with(it) {
-                    status = MissionRecordStatus.failed
+                    status = io.github.pantheooon.model.MissionRecordStatus.failed
                     errorMsg = "can not deserialize to Mission object,please check ${it.className} if it exists"
                     updated = Date()
                     repository.updateMission(it)

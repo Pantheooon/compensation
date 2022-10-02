@@ -19,22 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package press.pantheon.mission
+package io.github.pantheooon.mission
 
-interface Mission {
+import java.util.concurrent.TimeUnit
 
-    fun execute(): MissionExecutedResult
+annotation class MissionMeta(
+
+        val missionCode: String,
+
+        val retryTimes: Int = 7,
+
+        val gapTime: Long = 1,
+
+        val gapTimeUnit: TimeUnit = TimeUnit.MINUTES,
+
+        val retryType: RetryType = RetryType.EXPONENT
+)
+
+enum class RetryType {
+        INTERVAL, EXPONENT
 }
-
-
-interface RollbackAbleMission : Mission{
-
-    fun rollback(): MissionExecutedResult
-
-}
-
-
-data class MissionExecutedResult(
-    val success: Boolean,
-    val errorMsg: String? = null
-);

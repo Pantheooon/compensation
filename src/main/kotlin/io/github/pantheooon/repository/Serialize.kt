@@ -19,17 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package press.pantheon.engine
+package io.github.pantheooon.repository
 
-import press.pantheon.mission.Mission
-import press.pantheon.mission.MissionExecutedResult
-import java.util.*
+import io.github.pantheooon.mission.Mission
 
-interface MissionEngine {
+interface Serialize {
 
-    fun executeMission(mission: Mission): MissionExecutedResult
 
-    fun compensate()
+    fun encode(mission: Mission): String
 
-    fun cleanUp(expired: Date)
+
+    fun decode(json: String, clazz: Class<Mission>): Mission?
 }

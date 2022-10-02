@@ -19,24 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package press.pantheon.repository
+package io.github.pantheooon.mission
 
-import press.pantheon.mission.Mission
-import press.pantheon.mission.MissionExecutedResult
-import press.pantheon.model.MissionRecord
-import java.util.*
+interface Mission {
 
-interface MissionRepository {
-
-
-    fun saveMission(mission: MissionRecord)
-
-
-    fun updateMission(record: MissionRecord)
-
-
-    fun cleanUp(expired: Date)
-
-
-    fun compensateRecords(): List<MissionRecord>
+    fun execute(): MissionExecutedResult
 }
+
+
+interface RollbackAbleMission : Mission {
+
+    fun rollback(): MissionExecutedResult
+
+}
+
+
+data class MissionExecutedResult(
+    val success: Boolean,
+    val errorMsg: String? = null
+);

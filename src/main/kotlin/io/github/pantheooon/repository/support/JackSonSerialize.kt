@@ -19,32 +19,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package press.pantheon.repository.support
+package io.github.pantheooon.repository.support
 
-import press.pantheon.model.MissionRecord
-import press.pantheon.model.MissionRecordStatus.Companion.waitingToStart
-import press.pantheon.repository.MissionRepository
-import java.util.*
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
+import io.github.pantheooon.mission.Mission
+import io.github.pantheooon.repository.Serialize
+import java.text.SimpleDateFormat
+
+class JackSonSerialize : Serialize {
 
 
-class MemoryMissionRepository : MissionRepository {
+    private val mapper =  ObjectMapper().registerModule(KotlinModule())
 
-    private val missionList = mutableListOf<MissionRecord>()
-
-
-    override fun saveMission(mission: MissionRecord):Unit  = missionList.run {
-        add(mission)
+    init {
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
+        mapper.configure(DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS, false);
+        mapper.dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     }
 
+    override fun encode(mission: Mission): String = mapper.writeValueAsString(mission)
+    override fun decode(json: String, clazz: Class<Mission>): Mission?  =  mapper.readValue(json,clazz)
 
-    override fun updateMission(mission: MissionRecord): Unit = missionList.run {
-        removeIf { it.id == mission.id }
-        add(mission)
-    }
-
-    override fun cleanUp(expired: Date): Unit = missionList.run {
-        removeIf { it.created < expired }
-    }
-
-    override fun compensateRecords(): List<MissionRecord> = missionList.filter { it.status == waitingToStart && it.nextExecuteDate <= Date()}
 }
